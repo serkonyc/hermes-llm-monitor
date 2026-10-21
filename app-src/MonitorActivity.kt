@@ -25,7 +25,7 @@ import kotlin.math.roundToInt
 
 private const val ENDPOINT_LAN = "http://192.168.1.96:18422"
 private const val ENDPOINT_LOOPBACK = "http://127.0.0.1:18422"
-private const val REPO = "serkonyc/Hermes-LLM-Monitor"
+private const val REPO = "serkonyc/hermes-llm-monitor"
 private const val APP_VERSION = "1.0.0"
 private const val REFRESH_SECONDS = 10L
 
