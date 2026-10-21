@@ -3,7 +3,7 @@
 Android utility for Galaxy Z Fold 8: monitors the local mlx-serve LLM server.
 
 - Fold-aware: 4:3 inner screen shows two columns with larger type; 10:16 cover screen shows a compact single column.
-- Shows server status/latency, model list, usage endpoint, auto-refresh every 10 s.
+- Works offline: shows a baked-in demo dashboard; live status+metrics when 127.0.0.1 (pcdroid tunnel) or LAN mlx-serve is reachable. Auto-refresh every 10 s.
 - Update channel: GitHub Releases. The app checks `releases/latest` and offers the new APK.
 
 ## Build
