@@ -1,3 +1,6 @@
 build/
 *.apk
 *.keystore
+llm-monitor.apk
+llm-monitor.apk.idsig
+build/
