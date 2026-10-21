@@ -45,7 +45,7 @@ object WindowLayout {
 private const val ENDPOINT_LOOPBACK = "http://127.0.0.1:18422"
 private const val ENDPOINT_LAN = "http://192.168.1.96:18422"
 private const val REPO = "serkonyc/hermes-llm-monitor"
-private const val APP_VERSION = "1.1.0"
+private const val APP_VERSION = "1.1.9-fix"
 private const val REFRESH_SECONDS = 10L
 
 class MonitorActivity : Activity() {
@@ -198,21 +198,21 @@ class MonitorActivity : Activity() {
 
     private fun fetchLive(): LiveSnapshot? {
         val t0 = System.currentTimeMillis()
-        val modelsBody = listOf(ENDPOINT_LOOPBACK, ENDPOINT_LAN).firstNotNullOfOrNull { ep ->
-            try {
-                Pair(httpGet("$ep/v1/models"), ep)
-            } catch (_: Exception) {
-                null
-            }
-        } ?: return null
-        val (body, base) = modelsBody
+        // Avoids firstNotNullOfOrNull: its kotlin-stdlib inline call has shown up as a
+        // silent blank screen on One UI (see v1.2.3-java diagnosis). Plain loop instead.
+        var body: String? = null
+        var base: String = ENDPOINT_LOOPBACK
+        for (ep in arrayOf(ENDPOINT_LOOPBACK, ENDPOINT_LAN)) {
+            try { body = httpGet("$ep/v1/models"); base = ep; break } catch (_: Exception) {}
+        }
+        if (body == null) return null
         return try {
             val latency = System.currentTimeMillis() - t0
             val sb = StringBuilder()
             sb.appendLine("Status: ONLINE  (${latency} ms)")
             sb.appendLine("Endpoint: $base")
             sb.appendLine()
-            val arr = JSONObject(body).optJSONArray("data") ?: JSONArray()
+            val arr = JSONObject(body!!).optJSONArray("data") ?: JSONArray()
             val models = ArrayList<StarModel>()
             sb.appendLine("Models: ${arr.length()}")
             for (i in 0 until arr.length()) {
